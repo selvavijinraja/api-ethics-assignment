@@ -22,7 +22,7 @@ The dataset contains the following fields:
 
 # Task 2 — Audit the API Script for Ethical Compliance
 
-Your team's data collection script:
+
 
 ```python
 import requests
@@ -35,7 +35,7 @@ for page in range(1, 101):
     response = requests.get(API_URL, params={"page": page, "key": API_KEY})
     data = response.json()
     records.extend(data["results"])
-
+```
 # Store all records permanently in company database
 save_to_database(records)
 Violations and Fixes
@@ -45,22 +45,25 @@ Problem: The script loops through 100 pages with a free‑tier key. Free tiers a
 
 Correction: Upgrade to a paid/commercial license and use the proper key.
 
-python
+```python
 API_KEY = "commercial_tier_key_xyz789"  # upgraded license
 response = requests.get(API_URL, params={"page": page, "key": API_KEY})
+```
 Permanently storing API response data
 
 Problem: The script saves all records permanently in the company database. Most APIs restrict how long you can retain or cache their data. Permanent storage breaches the TOS and raises privacy concerns.
 
 Correction: Store only what is permitted (e.g., aggregate statistics or temporary cache), and respect retention limits.
 
-python
+```python
 # Example: store only aggregated counts, not raw records
 for page in range(1, 101):
     response = requests.get(API_URL, params={"page": page, "key": API_KEY})
     data = response.json()
     process_and_store_summary(data["results"])  # summaries, not raw permanent storage
+```
 Or, if caching is allowed for a limited time:
 
-python
+```python
 cache_records_temporarily(records, expiry_days=30)
+```
